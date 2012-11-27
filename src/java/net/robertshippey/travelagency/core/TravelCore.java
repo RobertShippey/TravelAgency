@@ -19,7 +19,7 @@ public class TravelCore {
      * Web service operation
      */
     @WebMethod(operationName = "makeBooking")
-    public String makeBooking(@WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
+    public String makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
         //TODO write your implementation code here:
         return null;
     }
