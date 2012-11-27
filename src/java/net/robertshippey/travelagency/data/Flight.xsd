@@ -15,6 +15,7 @@
     
     <xsd:complexType name="Flight">
         <xsd:sequence>
+            <xsd:element name="FlightCode" type="xsd:string"/>
             <xsd:element name="OriginCity" type="xsd:string"/>
             <xsd:element name="DestinationCity" type="xsd:string"/>
             <xsd:element name="Airline" type="xsd:string"/>

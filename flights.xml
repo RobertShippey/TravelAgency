@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ListOfFlights xmlns="http://data.travelagency.robertshippey.net/schema/flight">
+    <flight>
+        <OriginCity>London</OriginCity>
+        <DestinationCity>NewYork</DestinationCity>
+        <Airline>EasyJet</Airline>
+        <AvailableSeats>200</AvailableSeats>
+        <Passenger>
+            <Name>John Smith</Name>
+            <SeatNumber>12</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Andrew Danes</Name>
+            <SeatNumber>34</SeatNumber>
+        </Passenger>
+        <NumberOfConnections>1</NumberOfConnections>
+        <Fare Currency="GBP">
+            <Amount>500.0</Amount>
+        </Fare>
+    </flight>
+    <flight>
+        <OriginCity>Edinburgh</OriginCity>
+        <DestinationCity>Sydney</DestinationCity>
+        <Airline>HighFlies</Airline>
+        <AvailableSeats>200</AvailableSeats>
+        <NumberOfConnections>1</NumberOfConnections>
+        <Fare Currency="AUD">
+            <Amount>950.0</Amount>
+        </Fare>
+    </flight>
+</ListOfFlights>
