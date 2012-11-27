@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/H:/Level3/DOC%20PM/Travel%20Agency/src/java/net/robertshippey/travelagency/data/Flight.xsd" uri="src/conf/xml-resources/jaxb/Flight/Flight.xsd"/>
+</catalog>
