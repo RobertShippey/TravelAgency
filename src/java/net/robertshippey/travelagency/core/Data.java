@@ -4,6 +4,7 @@
  */
 package net.robertshippey.travelagency.core;
 
+import java.io.File;
 import net.robertshippey.travelagency.data.ListOfFlights;
 
 /**
@@ -13,7 +14,7 @@ import net.robertshippey.travelagency.data.ListOfFlights;
 public class Data {
 
     private static boolean loaded = false;
-    private static final java.io.File xmlFile = new java.io.File("/Users/Robert/Desktop/TravelAgency/flights.xml");
+    private static final java.io.File xmlFile = new java.io.File("R\\:"+File.pathSeparator+"Level3"+File.pathSeparator+"DOC PM"+File.pathSeparator+"Travel Agency"+File.pathSeparator+"flights.xml");
     private static ListOfFlights listOfFlights = new ListOfFlights();
 
     public static void loadData() {
