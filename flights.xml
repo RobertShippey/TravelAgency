@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ListOfFlights xmlns="http://data.travelagency.robertshippey.net/schema/flight">
     <flight>
+        <FlightCode>LDN-NY-1</FlightCode>
         <OriginCity>London</OriginCity>
         <DestinationCity>NewYork</DestinationCity>
+        <DepartureDate>20/01/2013</DepartureDate>
         <Airline>EasyJet</Airline>
-        <AvailableSeats>200</AvailableSeats>
+        <AvailableSeats>197</AvailableSeats>
         <Passenger>
             <Name>John Smith</Name>
             <SeatNumber>12</SeatNumber>
@@ -13,16 +15,66 @@
             <Name>Andrew Danes</Name>
             <SeatNumber>34</SeatNumber>
         </Passenger>
+        <Passenger>
+            <Name>Robert Shippey</Name>
+            <SeatNumber>200</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Name</Name>
+            <SeatNumber>199</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Name</Name>
+            <SeatNumber>198</SeatNumber>
+        </Passenger>
         <NumberOfConnections>1</NumberOfConnections>
         <Fare Currency="GBP">
             <Amount>500.0</Amount>
         </Fare>
     </flight>
     <flight>
+        <FlightCode>EBRG-SYD-1</FlightCode>
         <OriginCity>Edinburgh</OriginCity>
         <DestinationCity>Sydney</DestinationCity>
+        <DepartureDate>20/02/2013</DepartureDate>
         <Airline>HighFlies</Airline>
-        <AvailableSeats>200</AvailableSeats>
+        <AvailableSeats>191</AvailableSeats>
+        <Passenger>
+            <Name>Robert Shippey</Name>
+            <SeatNumber>200</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Robert Shippey</Name>
+            <SeatNumber>199</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Name</Name>
+            <SeatNumber>198</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Name</Name>
+            <SeatNumber>197</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>NameR</Name>
+            <SeatNumber>196</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>NameSGLHA</Name>
+            <SeatNumber>195</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>NameERGJ</Name>
+            <SeatNumber>194</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>TEST</Name>
+            <SeatNumber>193</SeatNumber>
+        </Passenger>
+        <Passenger>
+            <Name>Robert Test</Name>
+            <SeatNumber>192</SeatNumber>
+        </Passenger>
         <NumberOfConnections>1</NumberOfConnections>
         <Fare Currency="AUD">
             <Amount>950.0</Amount>

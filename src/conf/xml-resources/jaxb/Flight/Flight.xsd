@@ -18,10 +18,11 @@
             <xsd:element name="FlightCode" type="xsd:string"/>
             <xsd:element name="OriginCity" type="xsd:string"/>
             <xsd:element name="DestinationCity" type="xsd:string"/>
+            <xsd:element name="DepartureDate" type="xsd:string" />
             <xsd:element name="Airline" type="xsd:string"/>
             <xsd:element name="AvailableSeats" type="xsd:int"/>
             <xsd:element name="Passenger" type="taf:Passenger" minOccurs="0" maxOccurs="200"/>
-            <xsd:element name= "NumberOfConnections" type="xsd:int"/>
+            <xsd:element name="NumberOfConnections" type="xsd:int"/>
             <xsd:element name="Fare" type="taf:Fare"/>  
         </xsd:sequence>
     </xsd:complexType>

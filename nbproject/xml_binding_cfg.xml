@@ -4,7 +4,7 @@
 		<xjc-options>
 		</xjc-options>
 		<schema-sources>
-			<schema-source location='src/conf/xml-resources/jaxb/Flight/Flight.xsd' origLocation='src\java\net\robertshippey\travelagency\data\Flight.xsd'/>
+			<schema-source location='src/conf/xml-resources/jaxb/Flight/Flight.xsd' origLocation='src/java/net/robertshippey/travelagency/data/Flight.xsd'/>
 		</schema-sources>
 		<bindings>
 		</bindings>

@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
         *** GENERATED FROM jax-ws.xml - DO NOT EDIT !                             ***
         *** TO MODIFY wsimport options USE Web Service node -> Edit WS Attributes ***
         *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
         *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
 
-        --><project xmlns:xalan="http://xml.apache.org/xslt" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+        -->
+<project xmlns:xalan="http://xml.apache.org/xslt" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
     <!--
                 ===================
                 JAX-WS WSGEN SECTION
@@ -41,10 +43,11 @@
                 ===================
             -->
     <target name="wsimport-init" depends="init">
+        <fail if="${wsimport.bad.version}" message="WsImport ant task defined in the classpath ${j2ee.platform.wsimport.classpath} has a serious bug. See http://wiki.netbeans.org/MetroIssue for details."/>
         <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
         <property name="j2ee.platform.wsimport.classpath" value="${libs.jaxws21.classpath}"/>
         <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-            <classpath path="${java.home}/../lib/tools.jar:${j2ee.platform.wsimport.classpath}"/>
+            <classpath path="${java.home}/../lib/tools.jar:${j2ee.platform.wsimport.classpath}:${javac.classpath}"/>
         </taskdef>
         <condition property="conf-dir" value="${conf.dir}/" else="">
             <isset property="conf.dir"/>
@@ -66,5 +69,37 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/net/robertshippey/travelagency/core/reference"/>
         <delete dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TravelCore"/>
+    <target name="wsimport-client-CurrencyConversionWSService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService" destdir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/CurrencyConversionWSService/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?wsdl" xnocompile="true" xendorsed="true" package="taha.currencyconversion">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/CurrencyConversionWSService/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-CurrencyConversionWSService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/taha/currencyconversion"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService"/>
+    </target>
+    <target name="wsimport-client-TravelAgencyWebService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService" destdir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TravelAgencyWebService/wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/TravelAgency/TravelAgencyWebService?wsdl" xnocompile="true" xendorsed="true" package="net.robertshippey.travelagency.webservice.reference">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TravelAgencyWebService/wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-TravelAgencyWebService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/net/robertshippey/travelagency/webservice/reference"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-TravelCore, wsimport-client-CurrencyConversionWSService, wsimport-client-TravelAgencyWebService"/>
 </project>

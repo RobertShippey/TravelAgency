@@ -23,18 +23,17 @@ import net.robertshippey.travelagency.data.Passenger;
 @WebService(serviceName = "TravelCore")
 public class TravelCore {
 
-    private ListOfFlights listOfFlights;
-
-    @PostConstruct
-    protected void postConstrcut() {
-        listOfFlights = Data.getListOfFlights();
-    }
+    private final ListOfFlights listOfFlights = Data.getListOfFlights();
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "makeBooking")
-    public boolean makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") int noOfSeats) {
+    public boolean makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
+        int seatsToBook = Integer.parseInt(noOfSeats);
+        if(seatsToBook < 1){
+            return false;
+        }
         List<Flight> flights = listOfFlights.getFlight();
         Iterator<Flight> it;
         synchronized (flights) {
@@ -44,13 +43,13 @@ public class TravelCore {
             Flight flight = it.next();
             synchronized (flight) {
                 if (flight.getFlightCode().equals(flightCode)) {
-                    for (int x = 0; x < noOfSeats; x++) {
-                        int seats = flight.getAvailableSeats();
+                    for (int x = 0; x < seatsToBook; x++) {
+                        int avSeats = flight.getAvailableSeats();
                         Passenger p = new Passenger();
                         p.setName(passengerName);
-                        p.setSeatNumber(seats);
+                        p.setSeatNumber(avSeats);
                         flight.getPassenger().add(p);
-                        flight.setAvailableSeats(seats - 1);
+                        flight.setAvailableSeats(avSeats - 1);
                     }
                     Data.unload();
                     return true;
@@ -70,6 +69,14 @@ public class TravelCore {
             @WebParam(name = "date") String date,
             @WebParam(name = "directFlight") String directFlight) {
         //TODO write your implementation code here:
+        
+        //Ensureing not null
+        String blank = "";
+        if(origin == null){ origin = blank; }
+        if(destination == null){ destination = blank;}
+        if(date == null){ date = blank;}
+        if(directFlight == null || (!directFlight.equalsIgnoreCase("yes") && !directFlight.equalsIgnoreCase("no"))){ date = blank;}
+        
         ListOfFlights list = new ListOfFlights();
         List<Flight> flights = listOfFlights.getFlight();
         Iterator<Flight> it;
@@ -79,10 +86,11 @@ public class TravelCore {
         while (it.hasNext()) {
             Flight flight = it.next();
             synchronized (flight) {
-                if (flight.getOriginCity().equals(origin)
-                        || flight.getDestinationCity().equals(destination)
-                        || (directFlight.equals("yes") && flight.getNumberOfConnections() == 0)
-                        || (directFlight.equals("no") && flight.getNumberOfConnections() > 0)) {
+                if (flight.getOriginCity().equalsIgnoreCase(origin)
+                        || flight.getDestinationCity().equalsIgnoreCase(destination)
+                        || flight.getDepartureDate().equals(date)
+                        || (directFlight.equalsIgnoreCase("yes") && flight.getNumberOfConnections() == 1)
+                        || (directFlight.equalsIgnoreCase("no") && flight.getNumberOfConnections() > 1)) {
                     list.getFlight().add(flight);
                 }
             }
@@ -122,10 +130,5 @@ public class TravelCore {
             }
         }
         return (xml.toString());
-    }
-
-    @PreDestroy
-    protected void preDestroy() {
-        listOfFlights = null;
     }
 }

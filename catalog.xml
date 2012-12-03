@@ -3,4 +3,9 @@
     <system systemId="file:/H:/Level3/DOC%20PM/Travel%20Agency/src/java/net/robertshippey/travelagency/data/Flight.xsd" uri="src/conf/xml-resources/jaxb/Flight/Flight.xsd"/>
     <system systemId="http://localhost:8080/TravelAgency/TravelCore?wsdl" uri="src/conf/xml-resources/web-service-references/TravelCore/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl"/>
     <system systemId="http://localhost:8080/TravelAgency/TravelCore?xsd=1" uri="src/conf/xml-resources/web-service-references/TravelCore/wsdl/localhost_8080/TravelAgency/TravelCore.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?wsdl" uri="src/conf/xml-resources/web-service-references/CurrencyConversionWSService/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl"/>
+    <system systemId="http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?xsd=1" uri="src/conf/xml-resources/web-service-references/CurrencyConversionWSService/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/TravelAgency/TravelAgencyWebService?wsdl" uri="src/conf/xml-resources/web-service-references/TravelAgencyWebService/wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.wsdl"/>
+    <system systemId="http://localhost:8080/TravelAgency/TravelAgencyWebService?xsd=1" uri="src/conf/xml-resources/web-service-references/TravelAgencyWebService/wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.xsd_1.xsd"/>
+    <system systemId="file:/Users/Robert/Desktop/TravelAgency/src/java/net/robertshippey/travelagency/data/Flight.xsd" uri="src/conf/xml-resources/jaxb/Flight/Flight.xsd"/>
 </catalog>
