@@ -266,12 +266,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField originText;
     // End of variables declaration//GEN-END:variables
 
-    private static java.util.List<java.lang.String> getCurrencyCodes() {
-        taha.currencyconversion.CurrencyConversionWSService service = new taha.currencyconversion.CurrencyConversionWSService();
-        taha.currencyconversion.CurrencyConversionWS port = service.getCurrencyConversionWSPort();
-        return port.getCurrencyCodes();
-    }
-
     private ListOfFlights doSearch() {
         amSearching = true;
         String origin = originText.getText();
@@ -394,5 +388,11 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
         }
         return list;
+    }
+
+    private static java.util.List<java.lang.String> getCurrencyCodes() {
+        net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
+        net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
+        return port.getCurrencyCodes();
     }
 }

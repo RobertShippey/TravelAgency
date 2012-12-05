@@ -7,8 +7,6 @@ package net.robertshippey.travelagency.core;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;

@@ -22,6 +22,12 @@
 <message name="searchFlightsResponse">
 <part name="parameters" element="tns:searchFlightsResponse"/>
 </message>
+<message name="getCurrencyCodes">
+<part name="parameters" element="tns:getCurrencyCodes"/>
+</message>
+<message name="getCurrencyCodesResponse">
+<part name="parameters" element="tns:getCurrencyCodesResponse"/>
+</message>
 <portType name="TravelAgencyWebService">
 <operation name="getAllFlights">
 <input wsam:Action="http://webservice.travelagency.robertshippey.net/TravelAgencyWebService/getAllFlightsRequest" message="tns:getAllFlights"/>
@@ -34,6 +40,10 @@
 <operation name="searchFlights">
 <input wsam:Action="http://webservice.travelagency.robertshippey.net/TravelAgencyWebService/searchFlightsRequest" message="tns:searchFlights"/>
 <output wsam:Action="http://webservice.travelagency.robertshippey.net/TravelAgencyWebService/searchFlightsResponse" message="tns:searchFlightsResponse"/>
+</operation>
+<operation name="getCurrencyCodes">
+<input wsam:Action="http://webservice.travelagency.robertshippey.net/TravelAgencyWebService/getCurrencyCodesRequest" message="tns:getCurrencyCodes"/>
+<output wsam:Action="http://webservice.travelagency.robertshippey.net/TravelAgencyWebService/getCurrencyCodesResponse" message="tns:getCurrencyCodesResponse"/>
 </operation>
 </portType>
 <binding name="TravelAgencyWebServicePortBinding" type="tns:TravelAgencyWebService">
@@ -57,6 +67,15 @@
 </output>
 </operation>
 <operation name="searchFlights">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="getCurrencyCodes">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

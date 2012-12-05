@@ -16,19 +16,9 @@ public class Data {
     private static final java.io.File xmlFile = new java.io.File("flights.xml");
     private static ListOfFlights listOfFlights = new ListOfFlights();
 
-    public static void loadData() {
-        if (!loaded) {
-            load();
-        }
-    }
-
     public static ListOfFlights getListOfFlights() {
-        loadData();
-        return listOfFlights;
-    }
-
-    private static void load() {
-        System.out.println("current dir = " + System.getProperty("user.dir"));
+        if (!loaded) {
+            System.out.println("current dir = " + System.getProperty("user.dir"));
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(listOfFlights.getClass().getPackage().getName());
             javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
@@ -38,9 +28,11 @@ public class Data {
             // XXXTODO Handle exception
             java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
         }
-
+        }
+        return listOfFlights;
     }
 
+ 
     public static void unload() {
         new Thread() {
             public void run() {

@@ -7,14 +7,16 @@ package net.robertshippey.travelagency.webservice;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Iterator;
-import javax.jws.WebService;
+import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebService;
 import javax.xml.ws.WebServiceRef;
 import net.robertshippey.travelagency.core.reference.TravelCore_Service;
 import net.robertshippey.travelagency.data.Fare;
 import net.robertshippey.travelagency.data.Flight;
 import net.robertshippey.travelagency.data.ListOfFlights;
+import taha.currencyconversion.CurrencyConversionWS;
 import taha.currencyconversion.CurrencyConversionWSService;
 
 /**
@@ -24,9 +26,9 @@ import taha.currencyconversion.CurrencyConversionWSService;
 @WebService(serviceName = "TravelAgencyWebService")
 public class TravelAgencyWebService {
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl")
-    private CurrencyConversionWSService service_1;
+    private CurrencyConversionWSService currencyConverter;
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl")
-    private TravelCore_Service service;
+    private TravelCore_Service travelCore;
 
     /**
      * Web service operation
@@ -34,7 +36,8 @@ public class TravelAgencyWebService {
     @WebMethod(operationName = "getAllFlights")
     public String getAllFlights(@WebParam(name = "currency") String currency) {
         //TODO write your implementation code here:
-        String allFlights = getAllFlightsFromCore();
+        net.robertshippey.travelagency.core.reference.TravelCore port = travelCore.getTravelCorePort();
+        String allFlights = port.getAllFlights();
         StringReader sr = new StringReader(allFlights);
         ListOfFlights list = new ListOfFlights();
         try {
@@ -73,7 +76,8 @@ public class TravelAgencyWebService {
     @WebMethod(operationName = "makeBooking")
     public String makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
         //TODO write your implementation code here:
-        String bookingResult = makeBookingFromCore(flightCode, passengerName, noOfSeats);
+        net.robertshippey.travelagency.core.reference.TravelCore port = travelCore.getTravelCorePort();
+        String bookingResult = port.makeBooking(flightCode, passengerName, noOfSeats);
         return bookingResult;
     }
 
@@ -87,7 +91,8 @@ public class TravelAgencyWebService {
                                 @WebParam(name = "directFlight") String directFlight, 
                                 @WebParam(name = "currency") String currency) {
         //TODO write your implementation code here:
-        String searchResults = searchFlightsFromCore(origin, desdination, date, directFlight);
+        net.robertshippey.travelagency.core.reference.TravelCore port = travelCore.getTravelCorePort();
+        String searchResults = port.searchFlights(origin, desdination, date, directFlight);
         StringReader sr = new StringReader(searchResults);
         ListOfFlights list = new ListOfFlights();
         try {
@@ -120,30 +125,12 @@ public class TravelAgencyWebService {
         return (sw.toString());
     }
 
-    private String getAllFlightsFromCore() {
-        net.robertshippey.travelagency.core.reference.TravelCore port = service.getTravelCorePort();
-        return port.getAllFlights();
-    }
-
-    private String makeBookingFromCore(java.lang.String flightCode, java.lang.String passengerName, java.lang.String noOfSeats) {
-        net.robertshippey.travelagency.core.reference.TravelCore port = service.getTravelCorePort();
-        return port.makeBooking(flightCode, passengerName, noOfSeats);
-    }
-
-    private String searchFlightsFromCore(java.lang.String origin, java.lang.String desdination, java.lang.String date, java.lang.String directFlight) {
-        net.robertshippey.travelagency.core.reference.TravelCore port = service.getTravelCorePort();
-        return port.searchFlights(origin, desdination, date, directFlight);
-    }
-
-    private double getConversionRate(java.lang.String arg0, java.lang.String arg1) {
-        taha.currencyconversion.CurrencyConversionWS port = service_1.getCurrencyConversionWSPort();
-        return port.getConversionRate(arg0, arg1);
-    }
     
     private Fare convertFare(Fare original, String desired){
+        CurrencyConversionWS port = currencyConverter.getCurrencyConversionWSPort();
         String originalCurrency = original.getCurrency();
         float originalValue = original.getAmount();
-        double rate = this.getConversionRate(originalCurrency, desired);
+        double rate = port.getConversionRate(originalCurrency, desired);
         if(rate == -1){
             return original;
         }
@@ -152,5 +139,11 @@ public class TravelAgencyWebService {
         fare.setAmount(newValue);
         fare.setCurrency(desired);
         return fare;
+    }
+
+    @WebMethod(operationName = "getCurrencyCodes")
+    public List<String> getCurrencyCodes() {
+        taha.currencyconversion.CurrencyConversionWS port = currencyConverter.getCurrencyConversionWSPort();
+        return port.getCurrencyCodes();
     }
 }
