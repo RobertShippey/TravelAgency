@@ -25,6 +25,7 @@ import taha.currencyconversion.CurrencyConversionWSService;
  */
 @WebService(serviceName = "TravelAgencyWebService")
 public class TravelAgencyWebService {
+
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl")
     private CurrencyConversionWSService currencyConverter;
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl")
@@ -38,36 +39,15 @@ public class TravelAgencyWebService {
         //TODO write your implementation code here:
         net.robertshippey.travelagency.core.reference.TravelCore port = travelCore.getTravelCorePort();
         String allFlights = port.getAllFlights();
-        StringReader sr = new StringReader(allFlights);
-        ListOfFlights list = new ListOfFlights();
-        try {
-            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-            javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-            list = (ListOfFlights) unmarshaller.unmarshal(sr); //NOI18N
-        } catch (javax.xml.bind.JAXBException ex) {
-            // XXXTODO Handle exception
-            java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
-        }
+        ListOfFlights list = unmarshal(allFlights);
         Iterator<Flight> it = list.getFlight().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Flight flight = it.next();
             Fare cost = flight.getFare();
             Fare newFare = convertFare(cost, currency);
             flight.setFare(newFare);
         }
-        StringWriter sw = new StringWriter();
-        try {            
-            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-            javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(list, sw);
-        } catch (javax.xml.bind.JAXBException ex) {
-            // XXXTODO Handle exception
-            java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
-        }
-        
-        return (sw.toString());
+        return marshal(list);
     }
 
     /**
@@ -85,53 +65,32 @@ public class TravelAgencyWebService {
      * Web service operation
      */
     @WebMethod(operationName = "searchFlights")
-    public String searchFlights(@WebParam(name = "origin") String origin, 
-                                @WebParam(name = "desdination") String desdination, 
-                                @WebParam(name = "date") String date, 
-                                @WebParam(name = "directFlight") String directFlight, 
-                                @WebParam(name = "currency") String currency) {
+    public String searchFlights(@WebParam(name = "origin") String origin,
+            @WebParam(name = "desdination") String desdination,
+            @WebParam(name = "date") String date,
+            @WebParam(name = "directFlight") String directFlight,
+            @WebParam(name = "currency") String currency) {
         //TODO write your implementation code here:
         net.robertshippey.travelagency.core.reference.TravelCore port = travelCore.getTravelCorePort();
         String searchResults = port.searchFlights(origin, desdination, date, directFlight);
-        StringReader sr = new StringReader(searchResults);
-        ListOfFlights list = new ListOfFlights();
-        try {
-            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-            javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
-            list = (ListOfFlights) unmarshaller.unmarshal(sr); //NOI18N
-        } catch (javax.xml.bind.JAXBException ex) {
-            // XXXTODO Handle exception
-            java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
-        }
+        ListOfFlights list = unmarshal(searchResults);
+
         Iterator<Flight> it = list.getFlight().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Flight flight = it.next();
             Fare fare = flight.getFare();
-            Fare newFare = convertFare(fare,currency);
+            Fare newFare = convertFare(fare, currency);
             flight.setFare(newFare);
         }
-        StringWriter sw = new StringWriter();
-        try {            
-            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-            javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(list, sw);
-        } catch (javax.xml.bind.JAXBException ex) {
-            // XXXTODO Handle exception
-            java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
-        }
-        
-        return (sw.toString());
+        return marshal(list);
     }
 
-    
-    private Fare convertFare(Fare original, String desired){
+    private Fare convertFare(Fare original, String desired) {
         CurrencyConversionWS port = currencyConverter.getCurrencyConversionWSPort();
         String originalCurrency = original.getCurrency();
         float originalValue = original.getAmount();
         double rate = port.getConversionRate(originalCurrency, desired);
-        if(rate == -1){
+        if (rate == -1) {
             return original;
         }
         float newValue = (float) (rate * originalValue);
@@ -145,5 +104,32 @@ public class TravelAgencyWebService {
     public List<String> getCurrencyCodes() {
         taha.currencyconversion.CurrencyConversionWS port = currencyConverter.getCurrencyConversionWSPort();
         return port.getCurrencyCodes();
+    }
+
+    private String marshal(ListOfFlights list) {
+        try {
+            StringWriter xml = new StringWriter();
+            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
+            javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(list, xml);
+            return xml.toString();
+        } catch (javax.xml.bind.JAXBException ex) {
+            // XXXTODO Handle exception
+            return "Error!"; //NOI18N
+        }
+    }
+
+    private ListOfFlights unmarshal(String xml) {
+        StringReader sr = new StringReader(xml);
+        ListOfFlights list = new ListOfFlights();
+        try {
+            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
+            javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
+            list = (ListOfFlights) unmarshaller.unmarshal(sr); //NOI18N
+        } catch (javax.xml.bind.JAXBException ex) {
+        }
+        return list;
     }
 }

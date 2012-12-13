@@ -3,7 +3,7 @@
     <flight>
         <FlightCode>LDN-NY-1</FlightCode>
         <OriginCity>London</OriginCity>
-        <DestinationCity>NewYork</DestinationCity>
+        <DestinationCity>New York</DestinationCity>
         <DepartureDate>20/01/2013</DepartureDate>
         <Airline>EasyJet</Airline>
         <AvailableSeats>197</AvailableSeats>
@@ -75,9 +75,35 @@
             <Name>Robert Test</Name>
             <SeatNumber>192</SeatNumber>
         </Passenger>
-        <NumberOfConnections>1</NumberOfConnections>
+        <NumberOfConnections>2</NumberOfConnections>
         <Fare Currency="AUD">
             <Amount>950.0</Amount>
         </Fare>
     </flight>
+
+<flight>
+        <FlightCode>Bur-Port-1</FlightCode>
+        <OriginCity>Burbank</OriginCity>
+        <DestinationCity>Portland</DestinationCity>
+        <DepartureDate>10/02/2013</DepartureDate>
+        <Airline>PlainPlanes</Airline>
+        <AvailableSeats>100</AvailableSeats>
+        <NumberOfConnections>1</NumberOfConnections>
+        <Fare Currency="USD">
+            <Amount>120</Amount>
+        </Fare>
+    </flight>
+<flight>
+        <FlightCode>Prs-Brln-1</FlightCode>
+        <OriginCity>Paris</OriginCity>
+        <DestinationCity>Berlin</DestinationCity>
+        <DepartureDate>14/03/2013</DepartureDate>
+        <Airline>EuroTrip</Airline>
+        <AvailableSeats>200</AvailableSeats>
+        <NumberOfConnections>1</NumberOfConnections>
+        <Fare Currency="EUR">
+            <Amount>123.45</Amount>
+        </Fare>
+    </flight>
+
 </ListOfFlights>

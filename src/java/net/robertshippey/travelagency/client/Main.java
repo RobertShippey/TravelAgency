@@ -45,6 +45,8 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         });
+        
+        currenciesComboBox.setSelectedIndex(15);
 
     }
 
@@ -346,7 +348,8 @@ public class Main extends javax.swing.JFrame {
                 case 4:
                     return String.valueOf(f.getNumberOfConnections());
                 case 5:
-                    return String.valueOf(f.getFare().getAmount());
+                    String monies = String.format("%.2f", f.getFare().getAmount());
+                    return monies;
             }
             return "Error";
         }

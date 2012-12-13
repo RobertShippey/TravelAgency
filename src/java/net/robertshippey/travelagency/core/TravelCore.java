@@ -27,10 +27,10 @@ public class TravelCore {
      * Web service operation
      */
     @WebMethod(operationName = "makeBooking")
-    public boolean makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
+    public String makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
         int seatsToBook = Integer.parseInt(noOfSeats);
         if(seatsToBook < 1){
-            return false;
+            return "Can't book less than 1 seat.";
         }
         List<Flight> flights = listOfFlights.getFlight();
         Iterator<Flight> it;
@@ -50,12 +50,14 @@ public class TravelCore {
                         flight.setAvailableSeats(avSeats - 1);
                     }
                     Data.unload();
-                    return true;
+                    ListOfFlights booked = new ListOfFlights();
+                    booked.getFlight().add(flight);
+                    return marshal(booked);
                 }
             }
         }
         //TODO write your implementation code here:
-        return false;
+        return "Error!";
     }
 
     /**
@@ -94,19 +96,7 @@ public class TravelCore {
             }
         }
 
-        try {
-            StringWriter xml = new StringWriter();
-            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-            javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(list, xml);
-            return xml.toString();
-        } catch (javax.xml.bind.JAXBException ex) {
-            // XXXTODO Handle exception
-            java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
-        }
-        return null;
+        return marshal(list);
     }
 
     /**
@@ -114,19 +104,24 @@ public class TravelCore {
      */
     @WebMethod(operationName = "getAllFlights")
     public String getAllFlights() {
-        StringWriter xml = new StringWriter();
         synchronized (listOfFlights) {
+            return marshal(listOfFlights);
+        }
+    }
+    
+    private String marshal (ListOfFlights list){
             try {
-                javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(listOfFlights.getClass().getPackage().getName());
+                StringWriter xml = new StringWriter();
+                javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
                 javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                marshaller.marshal(listOfFlights, xml);
+                marshaller.marshal(list, xml);
+                return xml.toString();
             } catch (javax.xml.bind.JAXBException ex) {
                 // XXXTODO Handle exception
-                java.util.logging.Logger.getLogger("global").log(java.util.logging.Level.SEVERE, null, ex); //NOI18N
+                return "Error!"; //NOI18N
             }
-        }
-        return (xml.toString());
+        
     }
 }
