@@ -7,4 +7,5 @@
     <system systemId="http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?xsd=1" uri="wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.xsd_1.xsd"/>
     <system systemId="http://localhost:8080/TravelAgency/TravelAgencyWebService?wsdl" uri="wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.wsdl"/>
     <system systemId="http://localhost:8080/TravelAgency/TravelAgencyWebService?xsd=1" uri="wsdl/localhost_8080/TravelAgency/TravelAgencyWebService.xsd_1.xsd"/>
+    <system systemId="https://raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl" uri="wsdl/raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl"/>
 </catalog>

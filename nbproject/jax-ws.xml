@@ -9,38 +9,6 @@
     </service>
   </services>
   <clients>
-    <client name="TravelCore">
-      <wsdl-url>http://localhost:8080/TravelAgency/TravelCore?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_8080/TravelAgency/TravelCore.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">net.robertshippey.travelagency.core.reference</package-name>
-      <catalog-file>catalog.xml</catalog-file>
-      <wsimport-options>
-        <wsimport-option>
-          <wsimport-option-name>extension</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>verbose</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:8080/TravelAgency/TravelCore?wsdl</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>xnocompile</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>xendorsed</wsimport-option-name>
-          <wsimport-option-value>true</wsimport-option-value>
-        </wsimport-option>
-        <wsimport-option>
-          <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>net.robertshippey.travelagency.core.reference</wsimport-option-value>
-        </wsimport-option>
-      </wsimport-options>
-    </client>
     <client name="CurrencyConversionWSService">
       <wsdl-url>http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?wsdl</wsdl-url>
       <local-wsdl-file>localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl</local-wsdl-file>
@@ -102,6 +70,38 @@
         <wsimport-option>
           <wsimport-option-name>package</wsimport-option-name>
           <wsimport-option-value>net.robertshippey.travelagency.webservice.reference</wsimport-option-value>
+        </wsimport-option>
+      </wsimport-options>
+    </client>
+    <client name="TravelCore">
+      <wsdl-url>https://raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl</wsdl-url>
+      <local-wsdl-file>raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl</local-wsdl-file>
+      <package-name forceReplace="true">net.robertshippey.travelagency.core.reference</package-name>
+      <catalog-file>catalog.xml</catalog-file>
+      <wsimport-options>
+        <wsimport-option>
+          <wsimport-option-name>extension</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>verbose</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>wsdlLocation</wsimport-option-name>
+          <wsimport-option-value>https://raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xnocompile</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xendorsed</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>package</wsimport-option-name>
+          <wsimport-option-value>net.robertshippey.travelagency.core.reference</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

@@ -53,22 +53,6 @@
             <isset property="conf.dir"/>
         </condition>
     </target>
-    <target name="wsimport-client-TravelCore" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TravelCore" destdir="${build.generated.dir}/jax-wsCache/TravelCore" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TravelCore/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/TravelAgency/TravelCore?wsdl" xnocompile="true" xendorsed="true" package="net.robertshippey.travelagency.core.reference">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TravelCore/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/TravelCore">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-TravelCore" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/net/robertshippey/travelagency/core/reference"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
-    </target>
     <target name="wsimport-client-CurrencyConversionWSService" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService"/>
         <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService" destdir="${build.generated.dir}/jax-wsCache/CurrencyConversionWSService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/CurrencyConversionWSService/wsdl/localhost_8080/CurrencyConvertor/CurrencyConversionWSService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/CurrencyConvertor/CurrencyConversionWSService?wsdl" xnocompile="true" xendorsed="true" package="taha.currencyconversion">
@@ -101,5 +85,21 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/net/robertshippey/travelagency/webservice/reference"/>
         <delete dir="${build.generated.dir}/jax-wsCache/TravelAgencyWebService"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TravelCore, wsimport-client-CurrencyConversionWSService, wsimport-client-TravelAgencyWebService"/>
+    <target name="wsimport-client-TravelCore" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TravelCore" destdir="${build.generated.dir}/jax-wsCache/TravelCore" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TravelCore/wsdl/raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="https://raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl" xnocompile="true" xendorsed="true" package="net.robertshippey.travelagency.core.reference">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TravelCore/wsdl/raw.github.com/RobertShippey/TravelAgency/master/web/WEB-INF/wsdl/localhost_8080/TravelAgency/TravelCore.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TravelCore">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-TravelCore" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/net/robertshippey/travelagency/core/reference"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/TravelCore"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-CurrencyConversionWSService, wsimport-client-TravelAgencyWebService, wsimport-client-TravelCore"/>
 </project>

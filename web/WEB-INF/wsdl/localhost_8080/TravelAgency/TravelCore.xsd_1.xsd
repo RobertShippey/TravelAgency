@@ -22,14 +22,14 @@
 
 <xs:complexType name="makeBookingResponse">
 <xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0"/>
+<xs:element name="return" type="xs:boolean"/>
 </xs:sequence>
 </xs:complexType>
 
 <xs:complexType name="searchFlights">
 <xs:sequence>
 <xs:element name="origin" type="xs:string" minOccurs="0"/>
-<xs:element name="desdination" type="xs:string" minOccurs="0"/>
+<xs:element name="destination" type="xs:string" minOccurs="0"/>
 <xs:element name="date" type="xs:string" minOccurs="0"/>
 <xs:element name="directFlight" type="xs:string" minOccurs="0"/>
 </xs:sequence>
