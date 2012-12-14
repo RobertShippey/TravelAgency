@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import javax.xml.ws.WebServiceException;
 import net.robertshippey.travelagency.data.Flight;
 import net.robertshippey.travelagency.data.Passenger;
 
@@ -16,19 +17,19 @@ import net.robertshippey.travelagency.data.Passenger;
  * @author Robert
  */
 public class Details extends javax.swing.JFrame {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     private Flight theFlight;
     private TableModel passengerModel;
+
     /**
      * Creates new form Details
      */
-   
     public Details(Flight f) {
         theFlight = f;
         passengerModel = new PassengerTableModel(theFlight.getPassenger());
         initComponents();
-        
+
         airline.setText(theFlight.getAirline());
         availableSeats.setText(String.valueOf(theFlight.getAvailableSeats()));
         departureDate.setText(theFlight.getDepartureDate());
@@ -38,12 +39,13 @@ public class Details extends javax.swing.JFrame {
         flightCode.setText(theFlight.getFlightCode());
         noOfConnections.setText(String.valueOf(theFlight.getNumberOfConnections()));
         originCity.setText(theFlight.getOriginCity());
-        
+
     }
 
-    private TableModel getTableModel(){
+    private TableModel getTableModel() {
         return passengerModel;
     }
+
     /**
      * This method is called from within the constructor to initialize
      * the form. WARNING: Do NOT modify this code. The content of this
@@ -256,17 +258,23 @@ public class Details extends javax.swing.JFrame {
     }//GEN-LAST:event_nameTextActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       String name = nameText.getText();
-       String number = String.valueOf(1);
-       String result = makeBooking(theFlight.getFlightCode(), name, number);
-       boolean worked = Boolean.getBoolean(result);
-       String message;
-       if(worked){
-           message = number + " seat(s) booked for " + name;
-       } else {
-           message = "Couln't book seat(s)";
-       }
-       JOptionPane.showMessageDialog(null, message);
+        try {
+            String name = nameText.getText();
+            String number = String.valueOf(1);
+
+            String result = makeBooking(theFlight.getFlightCode(), name, number);
+            boolean worked = Boolean.getBoolean(result);
+            String message;
+            if (worked) {
+                message = number + " seat(s) booked for " + name;
+            } else {
+                message = "Couln't book seat(s)";
+            }
+            JOptionPane.showMessageDialog(null, message);
+        } catch (WebServiceException wse) {
+            JOptionPane.showMessageDialog(this, "Couldn't contact web service, no bookings made.");
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void altDirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_altDirButtonActionPerformed
@@ -274,7 +282,6 @@ public class Details extends javax.swing.JFrame {
         String destination = theFlight.getDestinationCity();
         new Directions(origin, destination).setVisible(true);
     }//GEN-LAST:event_altDirButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel airline;
     private javax.swing.JButton altDirButton;
@@ -306,18 +313,18 @@ public class Details extends javax.swing.JFrame {
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
         return port.makeBooking(flightCode, passengerName, noOfSeats);
     }
-    
+
     private class PassengerTableModel implements TableModel {
-        
+
         private Passenger[] passengers;
-        
-        public PassengerTableModel(List list){
+
+        public PassengerTableModel(List list) {
             passengers = (Passenger[]) list.toArray(new Passenger[0]);
         }
-        
+
         @Override
         public int getRowCount() {
-           return passengers.length;
+            return passengers.length;
         }
 
         @Override
@@ -327,9 +334,9 @@ public class Details extends javax.swing.JFrame {
 
         @Override
         public String getColumnName(int i) {
-            if(i == 0){
+            if (i == 0) {
                 return "Name";
-            } else if (i ==1){
+            } else if (i == 1) {
                 return "Seat No";
             } else {
                 return "Error";
@@ -348,9 +355,9 @@ public class Details extends javax.swing.JFrame {
 
         @Override
         public Object getValueAt(int i, int i1) {
-            if(i1 == 0){
+            if (i1 == 0) {
                 return passengers[i].getName();
-            } else if (i1 == 1){
+            } else if (i1 == 1) {
                 return passengers[i].getSeatNumber();
             } else {
                 return "Error";
@@ -359,18 +366,14 @@ public class Details extends javax.swing.JFrame {
 
         @Override
         public void setValueAt(Object o, int i, int i1) {
-            
         }
 
         @Override
         public void addTableModelListener(TableModelListener tl) {
-            
         }
 
         @Override
         public void removeTableModelListener(TableModelListener tl) {
-           
         }
-        
     }
 }

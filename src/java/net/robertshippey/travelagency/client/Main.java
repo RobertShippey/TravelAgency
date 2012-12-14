@@ -8,9 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.StringReader;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import javax.xml.ws.WebServiceException;
 import net.robertshippey.travelagency.data.Flight;
 import net.robertshippey.travelagency.data.ListOfFlights;
 
@@ -23,15 +25,20 @@ public class Main extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
     private String currency = "GBP";
     private FlightTableModel flightTableModel;
-    private final String[] currencyCodes;
+    private String[] currencyCodes;
     private boolean amSearching = false;
 
     /**
      * Creates new form Main
      */
     public Main() {
-        flightTableModel = new FlightTableModel(getAllFlights());
-        currencyCodes = getCurrencyCodes().toArray(new String[0]);
+        try {
+            flightTableModel = new FlightTableModel(getAllFlights());
+            currencyCodes = getCurrencyCodes().toArray(new String[0]);
+        } catch (WebServiceException wse) {
+            JOptionPane.showMessageDialog(null, "Could not connect to core web service. Stopping!");
+            System.exit(1);
+        }
 
         initComponents();
 
@@ -45,20 +52,24 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         });
-        
+
         currenciesComboBox.setSelectedIndex(15);
 
     }
 
     private void updateTableModel() {
-        ListOfFlights list;
-        if (amSearching) {
-            list = doSearch();
-        } else {
-            list = getAllFlights();
+        try {
+            ListOfFlights list;
+            if (amSearching) {
+                list = doSearch();
+            } else {
+                list = getAllFlights();
+            }
+            flightTableModel = new FlightTableModel(list);
+            jTable2.setModel(flightTableModel);
+        } catch (WebServiceException wse) {
+            JOptionPane.showMessageDialog(this, "Could not contact web wervice!");
         }
-        flightTableModel = new FlightTableModel(list);
-        jTable2.setModel(flightTableModel);
     }
 
     private TableModel getTableModel() {
@@ -355,31 +366,32 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
-    private static String getAllFlightsXML(java.lang.String currency) {
+    private static String getAllFlightsXML(String currency) throws WebServiceException {
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
         return port.getAllFlights(currency);
     }
 
-    private ListOfFlights getAllFlights() {
+    private ListOfFlights getAllFlights() throws WebServiceException {
         String xml = getAllFlightsXML(currency);
         ListOfFlights list = stringToXMLObj(xml);
         return list;
 
     }
 
-    private static String searchFlightsToXML(java.lang.String origin, java.lang.String desdination, java.lang.String date, java.lang.String directFlight, java.lang.String currency) {
+    private static String searchFlightsToXML(String origin, String desdination, String date, String directFlight, String currency) throws WebServiceException {
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
         return port.searchFlights(origin, desdination, date, directFlight, currency);
     }
-    private ListOfFlights searchFlights(String origin, String destination, String date, String directFlight){
+
+    private ListOfFlights searchFlights(String origin, String destination, String date, String directFlight) throws WebServiceException {
         String xml = searchFlightsToXML(origin, destination, date, directFlight, currency);
         ListOfFlights list = stringToXMLObj(xml);
         return list;
     }
-    
-    private static ListOfFlights stringToXMLObj (String xml){
+
+    private static ListOfFlights stringToXMLObj(String xml) {
         ListOfFlights list = new ListOfFlights();
         StringReader sr = new StringReader(xml);
         try {
@@ -393,7 +405,7 @@ public class Main extends javax.swing.JFrame {
         return list;
     }
 
-    private static java.util.List<java.lang.String> getCurrencyCodes() {
+    private static java.util.List<java.lang.String> getCurrencyCodes() throws WebServiceException {
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
         return port.getCurrencyCodes();

@@ -119,6 +119,8 @@ public class Directions extends javax.swing.JFrame {
             return "IOException: " + ioe.getMessage();
         } catch (XPathExpressionException xpee) {
             return "XPathExpressionException: " + xpee.getMessage();
+        } catch (Exception e){
+            return "Unexpected error: " + e.getMessage();
         }
     }
 }

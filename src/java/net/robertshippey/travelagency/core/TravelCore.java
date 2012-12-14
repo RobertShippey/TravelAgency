@@ -28,36 +28,40 @@ public class TravelCore {
      */
     @WebMethod(operationName = "makeBooking")
     public String makeBooking(@WebParam(name = "flightCode") String flightCode, @WebParam(name = "passengerName") String passengerName, @WebParam(name = "noOfSeats") String noOfSeats) {
-        int seatsToBook = Integer.parseInt(noOfSeats);
-        if(seatsToBook < 1){
-            return "Can't book less than 1 seat.";
-        }
-        List<Flight> flights = listOfFlights.getFlight();
-        Iterator<Flight> it;
-        synchronized (flights) {
-            it = flights.iterator();
-        }
-        while (it.hasNext()) {
-            Flight flight = it.next();
-            synchronized (flight) {
-                if (flight.getFlightCode().equals(flightCode)) {
-                    for (int x = 0; x < seatsToBook; x++) {
-                        int avSeats = flight.getAvailableSeats();
-                        Passenger p = new Passenger();
-                        p.setName(passengerName);
-                        p.setSeatNumber(avSeats);
-                        flight.getPassenger().add(p);
-                        flight.setAvailableSeats(avSeats - 1);
+        try {
+            int seatsToBook = Integer.parseInt(noOfSeats);
+            if (seatsToBook < 1) {
+                return "Can't book less than 1 seat.";
+            }
+            List<Flight> flights = listOfFlights.getFlight();
+            Iterator<Flight> it;
+            synchronized (flights) {
+                it = flights.iterator();
+            }
+            while (it.hasNext()) {
+                Flight flight = it.next();
+                synchronized (flight) {
+                    if (flight.getFlightCode().equals(flightCode)) {
+                        for (int x = 0; x < seatsToBook; x++) {
+                            int avSeats = flight.getAvailableSeats();
+                            Passenger p = new Passenger();
+                            p.setName(passengerName);
+                            p.setSeatNumber(avSeats);
+                            flight.getPassenger().add(p);
+                            flight.setAvailableSeats(avSeats - 1);
+                        }
+                        Data.unload();
+                        ListOfFlights booked = new ListOfFlights();
+                        booked.getFlight().add(flight);
+                        return marshal(booked);
                     }
-                    Data.unload();
-                    ListOfFlights booked = new ListOfFlights();
-                    booked.getFlight().add(flight);
-                    return marshal(booked);
                 }
             }
+            //TODO write your implementation code here:
+            return "Error!";
+        } catch (NumberFormatException nfe) {
+            return "Not a number";
         }
-        //TODO write your implementation code here:
-        return "Error!";
     }
 
     /**
@@ -69,14 +73,22 @@ public class TravelCore {
             @WebParam(name = "date") String date,
             @WebParam(name = "directFlight") String directFlight) {
         //TODO write your implementation code here:
-        
+
         //Ensureing not null
         String blank = "";
-        if(origin == null){ origin = blank; }
-        if(destination == null){ destination = blank;}
-        if(date == null){ date = blank;}
-        if(directFlight == null || (!directFlight.equalsIgnoreCase("yes") && !directFlight.equalsIgnoreCase("no"))){ date = blank;}
-        
+        if (origin == null) {
+            origin = blank;
+        }
+        if (destination == null) {
+            destination = blank;
+        }
+        if (date == null) {
+            date = blank;
+        }
+        if (directFlight == null) {
+            directFlight = blank;
+        }
+
         ListOfFlights list = new ListOfFlights();
         List<Flight> flights = listOfFlights.getFlight();
         Iterator<Flight> it;
@@ -108,20 +120,20 @@ public class TravelCore {
             return marshal(listOfFlights);
         }
     }
-    
-    private String marshal (ListOfFlights list){
-            try {
-                StringWriter xml = new StringWriter();
-                javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
-                javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
-                marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
-                marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                marshaller.marshal(list, xml);
-                return xml.toString();
-            } catch (javax.xml.bind.JAXBException ex) {
-                // XXXTODO Handle exception
-                return "Error!"; //NOI18N
-            }
-        
+
+    private String marshal(ListOfFlights list) {
+        try {
+            StringWriter xml = new StringWriter();
+            javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(list.getClass().getPackage().getName());
+            javax.xml.bind.Marshaller marshaller = jaxbCtx.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_ENCODING, "UTF-8"); //NOI18N
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(list, xml);
+            return xml.toString();
+        } catch (javax.xml.bind.JAXBException ex) {
+            // XXXTODO Handle exception
+            return "Error!"; //NOI18N
+        }
+
     }
 }

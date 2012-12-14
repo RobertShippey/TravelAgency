@@ -86,6 +86,11 @@ public class TravelAgencyWebService {
     }
 
     private Fare convertFare(Fare original, String desired) {
+        if (original == null){
+            return null;
+        } else if (desired == null){
+            return original;
+        }
         CurrencyConversionWS port = currencyConverter.getCurrencyConversionWSPort();
         String originalCurrency = original.getCurrency();
         float originalValue = original.getAmount();
