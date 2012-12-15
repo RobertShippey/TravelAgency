@@ -4,9 +4,12 @@
  */
 package net.robertshippey.travelagency.testing;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
-import java.util.LinkedList;
 
 /**
  *
@@ -14,72 +17,43 @@ import java.util.LinkedList;
  */
 public class StressTesting {
 
-    public static void main(String args[]) {
+    private static int n;
+    private static BufferedWriter bw;
 
-        System.out.println("One user, get all flights (x10)");
-        long[] time = new long[10];
-        for (int x = 0; x < 10; x++) {
-            long start = Calendar.getInstance().getTimeInMillis();
-            getAllFlights("GBP");
-            long finish = Calendar.getInstance().getTimeInMillis();
-            time[x] = finish - start;
-        }
-        long total = 0;
-        for (int x = 0; x < time.length; x++) {
-            total += time[x];
-        }
-        long average = total / time.length;
-        System.out.println(average);
+    public static void main(String args[]) throws IOException, InterruptedException {
+        bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("results.csv"))));
 
-        final LinkedList list = new LinkedList();
-        
-        Thread[] connections = new Thread[10];
-        for (int x = 0; x < connections.length; x++) {
-            connections[x] = new Thread() {
-                @Override
-                public void run() {
-                    long[] time = new long[10];
-                    for (int x = 0; x < 10; x++) {
-                        long start = Calendar.getInstance().getTimeInMillis();
-                        getAllFlights("GBP");
-                        long finish = Calendar.getInstance().getTimeInMillis();
-                        time[x] = finish - start;
-                    }
-                    long total = 0;
-                    for (int x = 0; x < time.length; x++) {
-                        total += time[x];
-                    }
-                    long average = total / time.length;
-                    list.add(average);
-                }
-            };
-        }
-        
-        for(int x=0;x<connections.length;x++){
-            connections[x].start();
-        }
-        
-        boolean done = false;
-        while(!done){
-            boolean mightBeDone = false;
-            for(int x=0;x<connections.length;x++){
-                if(!connections[x].isAlive()){
-                    mightBeDone = true;
-                } else {
-                    mightBeDone = false;
-                }
+        bw.write("method, number of concurrent connections, thread id, attempt number, time in miliseconds\r\n");
+        bw.flush();
+
+        for (n = 1; n < 10; n++) {
+            WSThread[] connections = new WSThread[n];
+            for (int c = 0; c < connections.length; c++) {
+                connections[c] = new WSThread();
+                connections[c].threadID = c;
             }
-            if(mightBeDone){
-                done = true;
+
+            for (int x = 0; x < connections.length; x++) {
+                connections[x].start();
             }
+
+            doneLoop:
+            while (true) {
+                for (int x = 0; x < connections.length; x++) {
+                    if (!connections[x].done) {
+                        continue doneLoop;
+                    }
+                }
+                break;
+            }
+            connections = null;
+            System.gc();
+            Thread.sleep(5000);
         }
-        String[] resultsStr = (String[]) list.toArray(new String[0]);
-        long multipleTotal = 0;
-        for(int x=0;x<resultsStr.length;x++){
-            multipleTotal += Long.parseLong(resultsStr[x]);
-        }
-        long multipleAverage = multipleTotal / resultsStr.length;
-        System.out.println(multipleAverage);
+
+        bw.flush();
+        bw.close();
+        System.out.println("Done!");
 
     }
 
@@ -87,5 +61,42 @@ public class StressTesting {
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
         net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
         return port.getAllFlights(currency);
+    }
+
+    private static class WSThread extends Thread {
+
+        public int threadID;
+        public boolean done = false;
+
+        @Override
+        public void run() {
+            for (int x = 0; x < 10; x++) {
+                long time = -1;
+                try {
+                    try {
+                        long start = Calendar.getInstance().getTimeInMillis();
+                        searchFlights("London", "Paris", "20/02/2013", "yes", "USD");
+                        long finish = Calendar.getInstance().getTimeInMillis();
+                        time = finish - start;
+                    } catch (Exception e) {
+                        bw.write("searchFlights," + n + "," + threadID + "," + x + ",failed\r\n");
+                        bw.flush();
+                        continue;
+                    }
+
+                    bw.write("searchFlights," + n + "," + threadID + "," + x + "," + time + "\r\n");
+                    bw.flush();
+                } catch (Exception ex) {
+                    System.out.println("Couldn't output: " + "searchFlights," + n + "," + threadID + "," + x + "," + time + "\r\n");
+                }
+            }
+            done = true;
+        }
+    }
+
+    private static String searchFlights(java.lang.String origin, java.lang.String desdination, java.lang.String date, java.lang.String directFlight, java.lang.String currency) {
+        net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service service = new net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService_Service();
+        net.robertshippey.travelagency.webservice.reference.TravelAgencyWebService port = service.getTravelAgencyWebServicePort();
+        return port.searchFlights(origin, desdination, date, directFlight, currency);
     }
 }
