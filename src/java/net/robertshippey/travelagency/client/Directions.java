@@ -31,7 +31,6 @@ public class Directions extends javax.swing.JFrame {
         initComponents();
         jLabel1.setText("Alternate directions from " + origin + " to " + destination + ".");
         String htmlDirections = getDirections(origin, destination);
-        jEditorPane1.setContentType("text/html");
         jEditorPane1.setText(htmlDirections);
         jEditorPane1.setEditable(false);
     }
@@ -51,6 +50,7 @@ public class Directions extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jEditorPane1.setContentType("text/html"); // NOI18N
         jScrollPane1.setViewportView(jEditorPane1);
 
         jLabel1.setText("jLabel1");
@@ -62,8 +62,8 @@ public class Directions extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                    .add(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -71,8 +71,8 @@ public class Directions extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 10, Short.MAX_VALUE)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 262, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -102,9 +102,8 @@ public class Directions extends javax.swing.JFrame {
 
 
                 for (int x = 0; x < nodes.getLength(); x++) {
-                    html += "<p>";
                     html += nodes.item(x).getTextContent();
-                    html += "</p>";
+                    html += "<br />";
                 }
             } else {
                 html += "<p>No alternate directions available. Sorry about that!</p>";

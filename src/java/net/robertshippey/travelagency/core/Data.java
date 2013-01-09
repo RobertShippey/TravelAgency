@@ -4,6 +4,7 @@
  */
 package net.robertshippey.travelagency.core;
 
+import java.io.File;
 import net.robertshippey.travelagency.data.ListOfFlights;
 
 /**
@@ -13,12 +14,11 @@ import net.robertshippey.travelagency.data.ListOfFlights;
 public class Data {
 
     private static boolean loaded = false;
-    private static final java.io.File xmlFile = new java.io.File("flights.xml");
+    private static final java.io.File xmlFile = new java.io.File(File.separator + "flights.xml");
     private static ListOfFlights listOfFlights = new ListOfFlights();
 
     public static ListOfFlights getListOfFlights() {
         if (!loaded) {
-            System.out.println("current dir = " + System.getProperty("user.dir"));
         try {
             javax.xml.bind.JAXBContext jaxbCtx = javax.xml.bind.JAXBContext.newInstance(listOfFlights.getClass().getPackage().getName());
             javax.xml.bind.Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
